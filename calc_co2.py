@@ -1,17 +1,17 @@
 #from process_kml import process
 from pandas import Series
 
-#emissions per km per person for different means of transport
+#emissions in kg per km per person for different means of transport
 co2_transport = {
-    'On a train': 14,
-    'Driving': 100,
-    'Running': 0,
-    'Moving': 0,
-    'Walking': 0,
-    'Plane': 285,
-    'On the subway': 14,
-    'On a bus': 68,
-    'On a tram': 23
+    'On a train': 0.014,
+    'Driving': 0.100,
+    'Running': 0.0,
+    'Moving': 0.0,
+    'Walking': 0.0,
+    'Plane': 0.285,
+    'On the subway': 0.014,
+    'On a bus': 0.068,
+    'On a tram': 0.023
 }
 
 def counter_day(dict_day):
