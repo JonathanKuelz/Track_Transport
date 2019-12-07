@@ -1,5 +1,6 @@
 #from process_kml import process
 
+
 #emissions per km per person for different means of transport
 co2_transport = {
     'Train': 14,
@@ -10,6 +11,7 @@ co2_transport = {
     'On the subway': 14,
     'On a bus': 68
 }
+
 
 def counter_day(dict_day):
     emission = {}
