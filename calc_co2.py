@@ -19,7 +19,8 @@ def counter_day(dict_day):
     emission['Date'] = dict_day['Date']
     transport_means = Series(dict_day['Transport'])
     co2permean = transport_means.map(co2_transport)
-    kms = list(map(int, dict_day['Distance']))
+    ms = list(map(int, dict_day['Distance']))
+    kms = [x / 1000 for x in ms]
     #print(kms)
     #print(co2permean)
     emission['co2_emission'] = sum([a*b for a,b in zip(co2permean, kms)])
