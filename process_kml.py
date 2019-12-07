@@ -36,3 +36,4 @@ def process(filepath):
 
     kml = read_kml(filepath)
     matches = process_trackstring(kml)
+    return matches
