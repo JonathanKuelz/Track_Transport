@@ -1,3 +1,9 @@
+from os import listdir
 from process_kml import process
 
-tracking_data = process('./Bewegungsdaten/history-2019-11-16.kml')
+directory = './Bewegungsdaten'
+files = listdir(directory)
+for i in range(len(files)):
+    files[i] = directory + '/' + files[i]
+tracking_data = process(files)
+print(tracking_data)
