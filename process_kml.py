@@ -20,7 +20,7 @@ def process_trackstring(track):
                                 '(Running|Walking|On the subway|On a bus|Moving|Driving|On a tram|On a train)(?=<)'),
         'Distance': re.compile('(?<=[a-zA-Z]</value></Data><Data name=\"Distance\"><value>)[1-9][0-9]*')
     }
-    matches['Date'] = re.findall(regex_dict['Date'], track)
+    matches['Date'] = re.findall(regex_dict['Date'], track)[0]
     matches['Transport'] = re.findall(regex_dict['Transport'], track)
     matches['Distance'] = list(map(int, re.findall(regex_dict['Distance'], track)))
     assert len(matches['Transport']) == len(matches['Distance']), "Different number for transports and distances"
