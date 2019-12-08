@@ -22,7 +22,7 @@ def process_trackstring(track):
     }
     matches['Date'] = re.findall(regex_dict['Date'], track)
     matches['Transport'] = re.findall(regex_dict['Transport'], track)
-    matches['Distance'] = re.findall(regex_dict['Distance'], track)
+    matches['Distance'] = list(map(int, re.findall(regex_dict['Distance'], track)))
     assert len(matches['Transport']) == len(matches['Distance']), "Different number for transports and distances"
     return matches
 
@@ -37,3 +37,44 @@ def process(filepath):
     kml = read_kml(filepath)
     matches = process_trackstring(kml)
     return matches
+
+
+def vehicle_props(historic_transportation):
+    props = {}
+
+    if isinstance(historic_transportation, dict):
+        for idx in range(len(historic_transportation['Transport'])):
+            props.update({historic_transportation['Transport'][idx], historic_transportation['Distance'][idx] / 1000})
+            return props
+
+    for dic in historic_transportation:
+        for idx in range(len(dic['Transport'])):
+
+            vehicle = dic['Transport'][idx]
+            if vehicle in props:
+                props[vehicle] += dic['Distance'][idx] / 1000
+            else:
+                props[vehicle] = dic['Distance'][idx] / 1000
+    return props
+
+
+def map_movement_to_vehicle(vehicle_data):
+    lookup = {
+        'Running': 'Foot',
+        'Walking': 'Foot',
+        'On the subway': 'Subway and Tram',
+        'On a bus': 'Bus',
+        'Moving': 'Foot',
+        'Driving': 'Car',
+        'On a tram': 'Subway and Tram',
+        'On a train': 'Train'
+    }
+    ret = {}
+    for key in vehicle_data:
+        transport = lookup[key]
+        if transport in ret:
+            ret[transport] += vehicle_data[key]
+        else:
+            ret[transport] = vehicle_data[key]
+    return ret
+

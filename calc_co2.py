@@ -1,7 +1,6 @@
-#from process_kml import process
 from pandas import Series
 
-#emissions in kg per km per person for different means of transport
+# emissions in kg per km per person for different means of transport
 co2_transport = {
     'On a train': 0.014,
     'Driving': 0.100,
@@ -22,9 +21,7 @@ def counter_day(dict_day):
     co2permean = transport_means.map(co2_transport)
     ms = list(map(int, dict_day['Distance']))
     kms = [x / 1000 for x in ms]
-    #print(kms)
-    #print(co2permean)
-    emission['co2_emission'] = sum([a*b for a,b in zip(co2permean, kms)])
+    emission['co2_emission'] = sum([a*b for a, b in zip(co2permean, kms)])
     return emission
 
 
