@@ -1,4 +1,5 @@
 import re
+import heapq
 
 from pykml import parser as kml_parser
 from lxml import etree
@@ -23,6 +24,9 @@ def process_trackstring(track):
     matches['Date'] = re.findall(regex_dict['Date'], track)[0]
     matches['Transport'] = re.findall(regex_dict['Transport'], track)
     matches['Distance'] = list(map(int, re.findall(regex_dict['Distance'], track)))
+    month = matches['Date'][5:7]
+    day = matches['Date'][8:10]
+    matches['Date'] = day + '-' + month
     assert len(matches['Transport']) == len(matches['Distance']), "Different number for transports and distances"
     return matches
 
@@ -76,5 +80,25 @@ def map_movement_to_vehicle(vehicle_data):
             ret[transport] += vehicle_data[key]
         else:
             ret[transport] = vehicle_data[key]
+    dist_total = 0
+    for key in ret:
+        dist_total += ret[key]
+    for key in ret:
+        ret[key] /= dist_total
+        ret[key] *= 100
+        ret[key] = int(ret[key])
     return ret
 
+
+def order_dicts(dictlist):
+    if isinstance(dictlist, dict):
+        return dictlist
+    ret = [None] * len(dictlist)
+    dates = [None] * len(dictlist)
+    for idx, dic_ in enumerate(dictlist):
+        dates[idx] = 100 * int(dic_['Date'][3:5]) + int(dic_['Date'][0:2])
+    sorted_indices = heapq.nlargest(len(dictlist), range(len(dates)), key=dates.__getitem__)
+    for i, idx in enumerate(sorted_indices):
+        ret[i] = dictlist[idx]
+    ret.reverse()
+    return ret
